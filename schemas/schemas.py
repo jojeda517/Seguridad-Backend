@@ -22,8 +22,8 @@ class FacultadSchema(BaseModel):
                 "logo": "ruta/al/logo.png"
             }
         }
-
-
+        
+        
 class EstudianteSchema(BaseModel):
     id: int
     cedula: str
@@ -32,6 +32,7 @@ class EstudianteSchema(BaseModel):
     direccion: str = None
     celular: str = None
     correo: str
+      
 
     class Config:
         orm_mode = True
@@ -79,6 +80,18 @@ class RolSchema(BaseModel):
             }
         }
 
+class CategoriaSchema(BaseModel):
+    id: int
+    nombre: str
+
+    class Config:
+        orm_mode = True
+        schema_extra = {
+            "example": {
+                "id": 1,
+                "nombre": "Nivelacion"
+            }
+        }
 
 class ResponseSchema(BaseModel):
     code: str
