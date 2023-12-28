@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, Path
 from fastapi import Depends
-from config.connection import SessionLocal, get_db
+from config.connection import get_db
 from sqlalchemy.orm import Session
 from schemas.schemas import FacultadSchema, ResponseSchema
 
