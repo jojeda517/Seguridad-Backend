@@ -51,9 +51,3 @@ detalle_categoria_carrera = Table(
     Column('ID_CAR_PER', Integer, ForeignKey('CARRERA.ID_CAR')),
     Column('ID_CAT_PER', Integer, ForeignKey('CATEGORIA.ID_CAT')),
 )
-
-detalle_estudiante_carrera = Table(
-    'DETALLE_EST_CAR', metadata,
-    Column('ID_CAR_PER', Integer, ForeignKey('CARRERA.ID_CAR')),
-    Column('ID_EST_PER', Integer, ForeignKey('ESTUDIANTE.ID_EST'))
-)

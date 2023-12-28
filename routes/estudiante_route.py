@@ -9,9 +9,9 @@ from schemas.schemas import EstudianteSchema, ResponseSchema
 estudiante_router = APIRouter()
 
 
-@estudiante_router.get("/estudiantes/{carrera_id}")
-def get_estudiante(carrera_id: int = Path(..., gt=0), db: Session = Depends(get_db)):
-    return EstudianteRepository.get_estudiantes(db, carrera_id)
+@estudiante_router.get("/estudiante")
+def get_estudiante(db: Session = Depends(get_db)):
+    return EstudianteRepository.get_estudiantes(db)
 
 
 @estudiante_router.get("/estudiante/{estudiante_id}")
@@ -22,9 +22,9 @@ def get_estudiante(estudiante_id: int = Path(..., gt=0), db: Session = Depends(g
     return db_estudiante
 
 
-@estudiante_router.post("/estudiante/{carrera_id}")
-def create_estudiante(carrera_id:int =Path(..., gt=0), estudiante: EstudianteSchema=None, db: Session = Depends(get_db)):
-    db_estudiante = EstudianteRepository.create_estudiante(db, estudiante, carrera_id)
+@estudiante_router.post("/estudiante")
+def create_estudiante(estudiante: EstudianteSchema, db: Session = Depends(get_db)):
+    db_estudiante = EstudianteRepository.create_estudiante(db, estudiante)
     return ResponseSchema(
         code="OK",
         status="success",
@@ -48,12 +48,12 @@ def edit_estudiante(estudiante_id: int = Path(..., gt=0), estudiante: Estudiante
     )
 
 
-@estudiante_router.delete("/estudiante/{estudiante_id}/{carrera_id}")
-def delete_estudiante(estudiante_id: int = Path(..., gt=0), carrera_id: int = Path(..., gt=0), db: Session = Depends(get_db)):
+@estudiante_router.delete("/estudiante/{estudiante_id}")
+def delete_estudiante(estudiante_id: int = Path(..., gt=0), db: Session = Depends(get_db)):
     db_estudiante = EstudianteRepository.get_estudiante(db, estudiante_id)
     if db_estudiante is None:
         raise HTTPException(status_code=404, detail="Estudiante no encontrado")
-    db_estudiante = EstudianteRepository.delete_estudiante(db, estudiante_id, carrera_id)
+    db_estudiante = EstudianteRepository.delete_estudiante(db, estudiante_id)
     return ResponseSchema(
         code="OK",
         status="success",
