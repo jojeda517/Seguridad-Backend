@@ -21,7 +21,6 @@ class CategoriaRepository:
             .limit(limit)
         )
         results = db.execute(stmt).scalars().all()
-
         return results
 
     def get_categoria(db: Session, categoria_id: int):
