@@ -24,6 +24,20 @@ class FacultadSchema(BaseModel):
         }
 
 
+class CategoriaSchema(BaseModel):
+    id: int
+    nombre: str
+
+    class Config:
+        orm_mode = True
+        schema_extra = {
+            "example": {
+                "id": 1,
+                "nombre": "Nivelacion"
+            }
+        }
+
+
 class ResponseSchema(BaseModel):
     code: str
     status: str
