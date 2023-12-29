@@ -50,6 +50,19 @@ class Categoria(Base):
     nombre = Column('NOM_CAT', String(255))
 
 
+
+class Usuario(Base):
+    __tablename__ = "USUARIOS"
+
+    id = Column('ID_USU', Integer, primary_key=True, autoincrement=True)
+    rol_id = Column('ID_ROL_PER', Integer, ForeignKey('ROL.ID_ROL'))
+    facultad_id = Column('ID_FAC_PER', Integer, ForeignKey('FACULTAD.ID_FAC'))
+    carrera_id = Column('ID_CAR_PER', Integer, ForeignKey('CARRERA.ID_CAR'))
+    nombre = Column('NOM_USU', String(255), nullable=False)
+    apellido = Column('APE_USU', String(255), nullable=False)
+    correo = Column('COR_USU', String(255), unique=True, nullable=False)
+    contrasena = Column('CON_USU', String(255), nullable=False)
+
 class Documento(Base):
     __tablename__ = "DOCUMENTO"
 
@@ -63,6 +76,7 @@ class Documento(Base):
         pytz.timezone('America/Guayaquil')))
     descripcion = Column('DES_DOC', String)
     url = Column('URL_DOC', String(255))
+
 
 
 detalle_categoria_carrera = Table(
