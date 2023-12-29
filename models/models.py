@@ -1,5 +1,7 @@
-from sqlalchemy import Column, Integer, String, Table, ForeignKey
+from sqlalchemy import Column, Integer, String, Table, ForeignKey, DateTime
 from config.connection import Base
+from datetime import datetime
+import pytz
 
 metadata = Base.metadata
 
@@ -48,6 +50,7 @@ class Categoria(Base):
     nombre = Column('NOM_CAT', String(255))
 
 
+
 class Usuario(Base):
     __tablename__ = "USUARIOS"
 
@@ -59,6 +62,21 @@ class Usuario(Base):
     apellido = Column('APE_USU', String(255), nullable=False)
     correo = Column('COR_USU', String(255), unique=True, nullable=False)
     contrasena = Column('CON_USU', String(255), nullable=False)
+
+class Documento(Base):
+    __tablename__ = "DOCUMENTO"
+
+    id = Column('ID_DOC', Integer, primary_key=True)
+    id_categoria = Column('ID_CAT_PER', Integer,
+                          ForeignKey('CATEGORIA.ID_CAT'))
+    id_usuario = Column('ID_USU_PER', Integer)
+    id_estudiante = Column('ID_EST_PER', Integer)
+    nombre = Column('NOM_DOC', String(255))
+    fecha = Column('FEC_DOC', DateTime, default=datetime.now(
+        pytz.timezone('America/Guayaquil')))
+    descripcion = Column('DES_DOC', String)
+    url = Column('URL_DOC', String(255))
+
 
 
 detalle_categoria_carrera = Table(
