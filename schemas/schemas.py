@@ -1,6 +1,8 @@
 from typing import List, Optional, Generic, TypeVar
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 from pydantic.generics import GenericModel
+from datetime import datetime
+from fastapi import UploadFile
 
 # creamos un tipo de variable "cualquiera"
 T = TypeVar("T")
@@ -22,8 +24,8 @@ class FacultadSchema(BaseModel):
                 "logo": "ruta/al/logo.png"
             }
         }
-        
-        
+
+
 class EstudianteSchema(BaseModel):
     id: int
     cedula: str
@@ -32,7 +34,6 @@ class EstudianteSchema(BaseModel):
     direccion: str = None
     celular: str = None
     correo: str
-      
 
     class Config:
         orm_mode = True
@@ -80,6 +81,7 @@ class RolSchema(BaseModel):
             }
         }
 
+
 class CategoriaSchema(BaseModel):
     id: int
     nombre: str
@@ -92,6 +94,30 @@ class CategoriaSchema(BaseModel):
                 "nombre": "Nivelacion"
             }
         }
+
+
+class DocumentoSchema(BaseModel):
+    id: int
+    id_categoria: int
+    id_usuario: int
+    id_estudiante: int
+    nombre: str
+    fecha: datetime
+    descripcion: str
+
+    class Config:
+        orm = {
+            "example": {
+                "id": 1,
+                "id_categoria": 1,
+                "id_usuario": 1,
+                "id_estudiante": 1,
+                "nombre": "doc",
+                "fecha": "2021-01-24T00:00:00",
+                "descripcion": "Archivo creado"
+            }
+        }
+
 
 class ResponseSchema(BaseModel):
     code: str

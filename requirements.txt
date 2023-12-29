@@ -29,3 +29,5 @@ SQLAlchemy==1.4.50
 starlette==0.32.0.post1
 typing_extensions==4.9.0
 uvicorn==0.25.0
+pytz==2023.3.post1
+python-multipart==0.0.6
