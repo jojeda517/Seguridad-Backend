@@ -1,11 +1,10 @@
-from fastapi import APIRouter, HTTPException, Path, UploadFile, File, Body
-from fastapi import Depends
-from config.connection import SessionLocal, get_db
+from fastapi import APIRouter, HTTPException, Path, UploadFile, File, Depends
+from fastapi.responses import FileResponse
+from config.connection import get_db
 from sqlalchemy.orm import Session
-from sqlalchemy import select
 from schemas.schemas import DocumentoSchema, ResponseSchema
 from repositories.documento_repository import DocumentoRepository
-from models.models import Documento, Estudiante, Carrera, Facultad, Categoria
+from models.models import Documento, Estudiante, Carrera, Facultad, Categoria, Usuario
 import os
 
 documento_router = APIRouter()
@@ -71,46 +70,58 @@ def delete_documento(documento_id: int = Path(..., gt=0), db: Session = Depends(
         result=db_documento
     )
 
-""" @documento_router.post("/archivo/{documento_id}")
-def upload_file(file:UploadFile=File(...), documento_id:int=0, db:Session=Depends(get_db)):
-    #Directorio  principal
-    directorio="Documents"
-    os.makedirs(directorio, exist_ok=True)
-    extension=os.path.splitext(file.filename)[1]
-    # Crea la ruta donde se almacenarán los documentos
-    file_path = os.path.join(directorio, file.filename)
+
+@documento_router.post("/archivo/{documento_id}")
+def upload_file(file: UploadFile = File(...), documento_id: int = 0, db: Session = Depends(get_db)):
+    # Directorio principal
+    directorio_base = "Documents"
+    os.makedirs(directorio_base, exist_ok=True)
+    extension = os.path.splitext(file.filename)[1]
+
+    datos_documento = db.query(Documento).filter(
+        Documento.id == documento_id).first()
+    datos_usuario = db.query(Usuario).filter(
+        Usuario.id == datos_documento.id_usuario).first()
+    datos_facultad = db.query(Facultad).filter(
+        Facultad.id == datos_usuario.facultad_id).first()
+    datos_carrera = db.query(Carrera).filter(
+        Carrera.id == datos_usuario.carrera_id).first()
+    datos_estudiante = db.query(Estudiante).filter(
+        Estudiante.id == datos_documento.id_estudiante).first()
+    datos_categoria = db.query(Categoria).filter(
+        Categoria.id == datos_documento.id_categoria).first()
+
+    # Construir la estructura de carpetas
+    folder_structure = f"{datos_facultad.nombre}/{datos_carrera.nombre}/{datos_estudiante.nombre}_{datos_estudiante.apellido}/{datos_categoria.nombre}"
+
+    # Directorio completo
+    directorio_completo = os.path.join(directorio_base, folder_structure)
+
+    # Crea la estructura de carpetas si no existen
+    os.makedirs(directorio_completo, exist_ok=True)
+
+    # Ruta donde se almacenará el documento
+    file_path = os.path.join(
+        directorio_completo, datos_documento.nombre+extension)
+
+    # Guardar el archivo en la ruta especificada
     with open(file_path, "wb") as image:
         image.write(file.file.read())
-    file_path = f"facultad/carrera/estudiante/categoria{file.filename}"
-    db_documento=DocumentoRepository.update_file(db=db, documento_id=documento_id, file=file_path)
+
+    # Actualizar la ruta del archivo en la base de datos
+    db_documento = DocumentoRepository.update_file(
+        db=db, documento_id=documento_id, file=file_path)
+
     print(db_documento)
     return db_documento
 
-@documento_router.post("/archivo2/{documento_id}")
-def upload_file2(file: UploadFile = File(...), documento_id: int = 0, db: Session = Depends(get_db)):
-    # Directorio principal
-    directorio = "Documents"
-    os.makedirs(directorio, exist_ok=True)
-    extension = os.path.splitext(file.filename)[1]
 
-    datos_documento=db.query(Documento).filter(Documento.id==documento_id).first()
-    datos_usuario=db.query(Usuario).filter(Usuario.id==datos_documento.id).first()
-    datos_facultad=db.query(Facultad).filter(Facultad.id==datos_usuario.id_facultad).first()
-    datos_carrera=db.query(Carrera).filter(Carrera.id==datos_usuario.id_carrra).first()
-    datos_estudiante=db.query(Estudiante).filter(Estudiante.id==datos_documento.id_estudiante).first()
-    datos_categoria=db.query(Categoria).filter(Categoria.id==datos_documento.id_categoria).first()
-    
-    # Crea la ruta donde se almacenarán los documentos
-    file_path = os.path.join(directorio, file.filename)
-    with open(file_path, "wb") as image:
-        image.write(file.file.read())
-
-    # Construir la estructura de carpetas
-    folder_structure = f"{datos_facultad['NOM_FAC']}/{datos_carrera['NOM_CAR']}/{datos_estudiante['NOM_EST']}_{datos_estudiante['APE_EST']}/{datos_categoria['ID_CAT']}"
-
-    # Actualizar la ruta del archivo en la base de datos
-    file_path = os.path.join(folder_structure, file.filename)
-    db_documento = DocumentoRepository.update_file(db=db, documento_id=documento_id, file=file_path)
-
-    print(db_documento)
-    return db_documento """
+@documento_router.get("/archivo/{document_id}")
+async def get_document(document_id: str, db: Session = Depends(get_db)):
+    db_documento = DocumentoRepository.get_documento(db, document_id)
+    directorio = db_documento.url
+    file_path = os.path.join(directorio)
+    if os.path.exists(file_path):
+        return FileResponse(file_path)
+    else:
+        return file_path

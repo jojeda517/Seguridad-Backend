@@ -5,6 +5,7 @@ from models.models import Documento
 from schemas.schemas import DocumentoSchema  # el esquema del JSON
 from datetime import datetime
 import pytz
+import os
 
 
 class DocumentoRepository:
@@ -39,6 +40,26 @@ class DocumentoRepository:
         _documento.descripcion = documento.descripcion
         db.commit()
         db.refresh(_documento)
+        url = (db.query(Documento).filter(
+            Documento.id == documento_id).first()).url
+        # Verificar si hay un parámetro de carpeta en la URL
+        if url:
+            # Obtener la carpeta de la URL y la extensión del archivo existente
+            folder_path, old_file_name = os.path.split(url)
+            _, old_file_extension = os.path.splitext(old_file_name)
+
+            # Construir la nueva ruta del archivo con la misma extensión
+            new_file_path = os.path.join(
+                folder_path, f"{documento.nombre}{old_file_extension}")
+
+            # Renombrar el archivo en el servidor
+            os.rename(url, new_file_path)
+
+            # Actualizar la ruta del archivo en la base de datos
+            _documento.url = new_file_path
+            db.commit()
+            db.refresh(_documento)
+
         return _documento
 
     def delete_documento(db: Session, documento_id: int):
