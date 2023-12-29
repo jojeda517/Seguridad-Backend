@@ -118,6 +118,8 @@ class UsuarioSchema(BaseModel):
                 "nombre": "Nombre",
                 "apellido": "Apellido",
                 "correo": "correo@example.com"
+            }
+        }
 
 class DocumentoSchema(BaseModel):
     id: int
