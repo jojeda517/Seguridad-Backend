@@ -5,6 +5,7 @@ from routes.estudiante_route import estudiante_router
 from routes.carrera_route import carrera_router
 from routes.usuario_route import usuario_router
 from routes.documento_route import documento_router
+from routes.carga_masiva_route import carga_masiva_router
 
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -24,3 +25,5 @@ app.include_router(carrera_router, tags=["Carrera"], prefix="/api/v1")
 app.include_router(categoria_router, tags=["Categoria"], prefix="/api/v1")
 app.include_router(usuario_router, tags=["Usuario"], prefix="/api/v1")
 app.include_router(documento_router, tags=["Documento"], prefix="/api/v1")
+app.include_router(carga_masiva_router, tags=[
+                   "Carga Masiva"], prefix="/api/v1")
