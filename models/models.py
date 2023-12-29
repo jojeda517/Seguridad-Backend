@@ -1,7 +1,10 @@
-from sqlalchemy import Column, Integer, String, Table, ForeignKey
+from sqlalchemy import Column, Integer, String, Table, ForeignKey, DateTime
 from config.connection import Base
+from datetime import datetime
+import pytz
 
 metadata = Base.metadata
+
 
 class Facultad(Base):
     __tablename__ = "FACULTAD"
@@ -11,7 +14,7 @@ class Facultad(Base):
     sigla = Column('SIG_FAC', String(10))
     logo = Column('LOG_FAC', String(100))
 
-    
+
 class Estudiante(Base):
     __tablename__ = "ESTUDIANTE"
 
@@ -38,12 +41,28 @@ class Rol(Base):
 
     id = Column('ID_ROL', Integer, primary_key=True, autoincrement=True)
     nombre = Column('NOM_ROL', String(255), unique=True, nullable=False)
-    
+
+
 class Categoria(Base):
     __tablename__ = "CATEGORIA"
 
     id = Column('ID_CAT', Integer, primary_key=True)
     nombre = Column('NOM_CAT', String(255))
+
+
+class Documento(Base):
+    __tablename__ = "DOCUMENTO"
+
+    id = Column('ID_DOC', Integer, primary_key=True)
+    id_categoria = Column('ID_CAT_PER', Integer,
+                          ForeignKey('CATEGORIA.ID_CAT'))
+    id_usuario = Column('ID_USU_PER', Integer)
+    id_estudiante = Column('ID_EST_PER', Integer)
+    nombre = Column('NOM_DOC', String(255))
+    fecha = Column('FEC_DOC', DateTime, default=datetime.now(
+        pytz.timezone('America/Guayaquil')))
+    descripcion = Column('DES_DOC', String)
+    url = Column('URL_DOC', String(255))
 
 
 detalle_categoria_carrera = Table(
