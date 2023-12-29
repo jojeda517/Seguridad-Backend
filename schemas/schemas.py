@@ -22,8 +22,8 @@ class FacultadSchema(BaseModel):
                 "logo": "ruta/al/logo.png"
             }
         }
-        
-        
+
+
 class EstudianteSchema(BaseModel):
     id: int
     cedula: str
@@ -32,7 +32,6 @@ class EstudianteSchema(BaseModel):
     direccion: str = None
     celular: str = None
     correo: str
-      
 
     class Config:
         orm_mode = True
@@ -80,6 +79,7 @@ class RolSchema(BaseModel):
             }
         }
 
+
 class CategoriaSchema(BaseModel):
     id: int
     nombre: str
@@ -92,6 +92,32 @@ class CategoriaSchema(BaseModel):
                 "nombre": "Nivelacion"
             }
         }
+
+
+class UsuarioSchema(BaseModel):
+    id: int
+    rol_id: int
+    facultad_id: int
+    carrera_id: int
+    nombre: str
+    apellido: str
+    correo: str
+    contrasena: str
+
+    class Config:
+        orm_mode = True
+        schema_extra = {
+            "example": {
+                "id": 1,
+                "rol_id": 1,
+                "facultad_id": 1,
+                "carrera_id": 1,
+                "nombre": "Nombre",
+                "apellido": "Apellido",
+                "correo": "correo@example.com"
+            }
+        }
+
 
 class ResponseSchema(BaseModel):
     code: str

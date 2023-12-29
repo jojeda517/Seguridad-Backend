@@ -3,6 +3,7 @@ from routes.facultad_route import facultad_router
 from routes.categoria_route import categoria_router
 from routes.estudiante_route import estudiante_router
 from routes.carrera_route import carrera_router
+from routes.usuario_route import usuario_router
 from fastapi.middleware.cors import CORSMiddleware
 
 
@@ -19,4 +20,5 @@ app.add_middleware(
 app.include_router(facultad_router, tags=["Facultad"], prefix="/api/v1")
 app.include_router(estudiante_router, tags=["Estudiante"], prefix="/api/v1")
 app.include_router(carrera_router, tags=["Carrera"], prefix="/api/v1")
-app.include_router(categoria_router, tags=["categoria"], prefix="/api/v1")
+app.include_router(categoria_router, tags=["Categoria"], prefix="/api/v1")
+app.include_router(usuario_router, tags=["Usuario"], prefix="/api/v1")
