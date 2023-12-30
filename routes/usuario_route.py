@@ -4,7 +4,7 @@ from config.connection import get_db
 from sqlalchemy.orm import Session
 
 from repositories.usuario_repository import UsuarioRepository
-from schemas.schemas import UsuarioSchema, ResponseSchema
+from schemas.schemas import UsuarioSchema, ResponseSchema, UsuarioLoginSechema
 
 usuario_router = APIRouter()
 
@@ -23,8 +23,16 @@ def get_usuario(usuario_id: int = Path(..., gt=0), db: Session = Depends(get_db)
 
 
 @usuario_router.post("/usuario/login")
-def login(usuario: UsuarioSchema, db: Session = Depends(get_db)):
+def login(usuario: UsuarioLoginSechema, db: Session = Depends(get_db)):
     db_usuario = UsuarioRepository.login(db, usuario)
+    if db_usuario is None:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+    return db_usuario
+
+
+@usuario_router.post("/usuario/login/microsoft")
+def login_microsoft(usuario: UsuarioLoginSechema, db: Session = Depends(get_db)):
+    db_usuario = UsuarioRepository.login_microsoft(db, usuario)
     if db_usuario is None:
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
     return db_usuario
