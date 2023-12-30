@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session  # La sesión de la DB
 from models.models import Usuario  # El modelo ORM de nuestra DB
-from schemas.schemas import UsuarioSchema  # el esquema del JSON
+from schemas.schemas import UsuarioSchema, UsuarioLoginSechema  # el esquema del JSON
 
 
 class UsuarioRepository:
@@ -10,8 +10,15 @@ class UsuarioRepository:
     def get_usuario(db: Session, usuario_id: int):
         return db.query(Usuario).filter(Usuario.id == usuario_id).first()
 
-    def login(db: Session, usuario: UsuarioSchema):
+    def login(db: Session, usuario: UsuarioLoginSechema):
         return db.query(Usuario).filter(Usuario.correo == usuario.correo, Usuario.contrasena == usuario.contrasena).first()
+
+    def login_microsoft(db: Session, usuario: UsuarioLoginSechema):
+        _usuario = db.query(Usuario).filter(Usuario.correo == usuario.correo).first()
+        if _usuario is None:
+            return None
+        else:
+            return _usuario.rol_id
 
     def create_usuario(db: Session, usuario: UsuarioSchema):
         db_usuario = Usuario(

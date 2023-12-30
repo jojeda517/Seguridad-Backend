@@ -20,6 +20,9 @@ class EstudianteRepository:
 
         return results
 
+    def get_all_estudiantes(db: Session, skip: int = 0, limit: int = 1000):
+        return db.query(Estudiante).offset(skip).limit(limit).all()
+
     def get_estudiante(db: Session, estudiante_id: int):
         return db.query(Estudiante).filter(Estudiante.id == estudiante_id).first()
 

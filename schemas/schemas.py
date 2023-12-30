@@ -96,7 +96,6 @@ class CategoriaSchema(BaseModel):
         }
 
 
-
 class UsuarioSchema(BaseModel):
     id: int
     rol_id: int
@@ -117,9 +116,25 @@ class UsuarioSchema(BaseModel):
                 "carrera_id": 1,
                 "nombre": "Nombre",
                 "apellido": "Apellido",
-                "correo": "correo@example.com"
+                "correo": "correo@example.com",
+                "contrasena": "contrasena"
             }
         }
+
+
+class UsuarioLoginSechema(BaseModel):
+    correo: str
+    contrasena: str
+
+    class Config:
+        orm_mode = True
+        schema_extra = {
+            "example": {
+                "correo": "test@gmail.com",
+                "contrasena": "test"
+            }
+        }
+
 
 class DocumentoSchema(BaseModel):
     id: int
