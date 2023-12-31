@@ -10,6 +10,9 @@ class CarreraRepository:
     def get_carrera(db: Session, carrera_id: int):
         return db.query(Carrera).filter(Carrera.id == carrera_id).first()
 
+    def get_carrera_facultad(db: Session, facultad_id: int):
+        return db.query(Carrera).filter(Carrera.facultad_id == facultad_id).all()
+
     def create_carrera(db: Session, carrera: CarreraSchema):
         db_carrera = Carrera(
             facultad_id=carrera.facultad_id,

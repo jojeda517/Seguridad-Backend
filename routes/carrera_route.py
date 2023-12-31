@@ -22,6 +22,14 @@ def get_carrera(carrera_id: int = Path(..., gt=0), db: Session = Depends(get_db)
     return db_carrera
 
 
+@carrera_router.get("/carrera/facultad/{facultad_id}")
+def get_carrera_facultad(facultad_id: int = Path(..., gt=0), db: Session = Depends(get_db)):
+    db_carrera = CarreraRepository.get_carrera_facultad(db, facultad_id)
+    if db_carrera is None:
+        raise HTTPException(status_code=404, detail="Carreras no encontrada")
+    return db_carrera
+
+
 @carrera_router.post("/carrera")
 def create_carrera(carrera: CarreraSchema, db: Session = Depends(get_db)):
     db_carrera = CarreraRepository.create_carrera(db, carrera)
