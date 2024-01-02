@@ -122,6 +122,30 @@ class UsuarioSchema(BaseModel):
         }
 
 
+class UsuarioGetSchema(BaseModel):
+    id: int
+    rol_id: int
+    facultad_id: int
+    carrera_id: int
+    nombre: str
+    apellido: str
+    correo: str
+
+    class Config:
+        orm_mode = True
+        schema_extra = {
+            "example": {
+                "id": 1,
+                "rol_id": 1,
+                "facultad_id": 1,
+                "carrera_id": 1,
+                "nombre": "Nombre",
+                "apellido": "Apellido",
+                "correo": "correo@example.com",
+            }
+        }
+
+
 class UsuarioLoginSechema(BaseModel):
     correo: str
     contrasena: str

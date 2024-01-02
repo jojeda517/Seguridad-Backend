@@ -1,20 +1,21 @@
+from typing import List
 from fastapi import APIRouter, HTTPException, Path
 from fastapi import Depends
 from config.connection import get_db
 from sqlalchemy.orm import Session
 
 from repositories.usuario_repository import UsuarioRepository
-from schemas.schemas import UsuarioSchema, ResponseSchema, UsuarioLoginSechema
+from schemas.schemas import UsuarioSchema, ResponseSchema, UsuarioLoginSechema, UsuarioGetSchema
 
 usuario_router = APIRouter()
 
 
-@usuario_router.get("/usuario")
+@usuario_router.get("/usuario", response_model=List[UsuarioGetSchema])
 def get_usuario(db: Session = Depends(get_db)):
     return UsuarioRepository.get_usuarios(db)
 
 
-@usuario_router.get("/usuario/{usuario_id}")
+@usuario_router.get("/usuario/{usuario_id}", response_model=UsuarioGetSchema)
 def get_usuario(usuario_id: int = Path(..., gt=0), db: Session = Depends(get_db)):
     db_usuario = UsuarioRepository.get_usuario(db, usuario_id)
     if db_usuario is None:
@@ -22,7 +23,7 @@ def get_usuario(usuario_id: int = Path(..., gt=0), db: Session = Depends(get_db)
     return db_usuario
 
 
-@usuario_router.post("/usuario/login")
+@usuario_router.post("/usuario/login", response_model=UsuarioGetSchema)
 def login(usuario: UsuarioLoginSechema, db: Session = Depends(get_db)):
     db_usuario = UsuarioRepository.login(db, usuario)
     if db_usuario is None:
@@ -30,9 +31,18 @@ def login(usuario: UsuarioLoginSechema, db: Session = Depends(get_db)):
     return db_usuario
 
 
-@usuario_router.post("/usuario/login/microsoft")
+@usuario_router.post("/usuario/login/microsoft", response_model=UsuarioGetSchema)
 def login_microsoft(usuario: UsuarioLoginSechema, db: Session = Depends(get_db)):
     db_usuario = UsuarioRepository.login_microsoft(db, usuario)
+    if db_usuario is None:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+    return db_usuario
+
+
+@usuario_router.get("/usuario/rol/{rol_id}", response_model=List[UsuarioGetSchema])
+def get_usuario_por_rol(rol_id: int = Path(..., gt=0), db: Session = Depends(get_db)):
+    db_usuario = UsuarioRepository.get_usuario_por_rol(db, rol_id)
+    # Una lista de tipo UsuarioGetSchema
     if db_usuario is None:
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
     return db_usuario
