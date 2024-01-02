@@ -10,11 +10,15 @@ class UsuarioRepository:
     def get_usuario(db: Session, usuario_id: int):
         return db.query(Usuario).filter(Usuario.id == usuario_id).first()
 
+    def get_usuario_por_rol(db: Session, rol_id: int):
+        return db.query(Usuario).filter(Usuario.rol_id == rol_id).all()
+
     def login(db: Session, usuario: UsuarioLoginSechema):
         return db.query(Usuario).filter(Usuario.correo == usuario.correo, Usuario.contrasena == usuario.contrasena).first()
 
     def login_microsoft(db: Session, usuario: UsuarioLoginSechema):
-        _usuario = db.query(Usuario).filter(Usuario.correo == usuario.correo).first()
+        _usuario = db.query(Usuario).filter(
+            Usuario.correo == usuario.correo).first()
         if _usuario is None:
             return None
         else:
