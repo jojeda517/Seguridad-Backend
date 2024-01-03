@@ -31,7 +31,7 @@ def login(usuario: UsuarioLoginSechema, db: Session = Depends(get_db)):
     return db_usuario
 
 
-@usuario_router.post("/usuario/login/microsoft", response_model=UsuarioSchema)
+@usuario_router.post("/usuario/login/microsoft")
 def login_microsoft(usuario: UsuarioLoginSechema, db: Session = Depends(get_db)):
     db_usuario = UsuarioRepository.login_microsoft(db, usuario)
     if db_usuario is None:
