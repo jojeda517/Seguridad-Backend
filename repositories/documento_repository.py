@@ -17,12 +17,14 @@ class DocumentoRepository:
 
     def post_documento(db: Session, documento: DocumentoSchema, usuario_id: int, categoria_id: int, estudiante_id: int):
 
+        date = datetime.now(pytz.timezone('America/Guayaquil'))
+
         db_documento = Documento(
             id_categoria=categoria_id,
             id_usuario=usuario_id,
             id_estudiante=estudiante_id,
             nombre=documento.nombre,
-            fecha=documento.fecha,
+            fecha=date,
             descripcion=documento.descripcion
         )
 
