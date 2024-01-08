@@ -4,7 +4,7 @@ import os
 
 load_dotenv()
 
-clave = os.getenv("AES_PASSWORD")
+clave = os.getenv("AES_KEY")
 cipher_suite = Fernet(clave)
 
 def encriptar(texto):
