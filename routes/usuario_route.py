@@ -7,6 +7,8 @@ from sqlalchemy.orm import Session
 from repositories.usuario_repository import UsuarioRepository
 from schemas.schemas import UsuarioSchema, ResponseSchema, UsuarioLoginSechema, UsuarioGetSchema
 
+from utils.seguridad import encriptar
+
 usuario_router = APIRouter()
 
 
@@ -50,7 +52,9 @@ def get_usuario_por_rol(rol_id: int = Path(..., gt=0), db: Session = Depends(get
 
 @usuario_router.post("/usuario")
 def create_usuario(usuario: UsuarioSchema, db: Session = Depends(get_db)):
-    db_usuario = UsuarioRepository.create_usuario(db, usuario)
+    _usuario = usuario
+    _usuario.contrasena = encriptar(_usuario.contrasena)
+    db_usuario = UsuarioRepository.create_usuario(db, _usuario)
     return ResponseSchema(
         code="OK",
         status="success",
