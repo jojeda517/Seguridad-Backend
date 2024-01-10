@@ -31,12 +31,6 @@ def get_estudiante(estudiante_id: int = Path(..., gt=0), db: Session = Depends(g
 
 @estudiante_router.post("/estudiante/{carrera_id}")
 def create_estudiante(carrera_id: int = Path(..., gt=0), estudiante: EstudianteSchema = None, db: Session = Depends(get_db)):
-    estudiante.nombre = encriptar(estudiante.nombre)
-    estudiante.apellido = encriptar(estudiante.apellido)
-    estudiante.cedula = encriptar(estudiante.cedula)
-    estudiante.celular = encriptar(estudiante.celular)
-    estudiante.correo = encriptar(estudiante.correo)
-    estudiante.direccion = encriptar(estudiante.direccion)
     db_estudiante = EstudianteRepository.create_estudiante(
         db, estudiante, carrera_id)
     return ResponseSchema(
@@ -52,12 +46,6 @@ def edit_estudiante(estudiante_id: int = Path(..., gt=0), estudiante: Estudiante
     db_estudiante = EstudianteRepository.get_estudiante(db, estudiante_id)
     if db_estudiante is None:
         raise HTTPException(status_code=404, detail="Estudiante no encontrado")
-    estudiante.nombre = encriptar(estudiante.nombre)
-    estudiante.apellido = encriptar(estudiante.apellido)
-    estudiante.cedula = encriptar(estudiante.cedula)
-    estudiante.celular = encriptar(estudiante.celular)
-    estudiante.correo = encriptar(estudiante.correo)
-    estudiante.direccion = encriptar(estudiante.direccion)
 
     db_estudiante = EstudianteRepository.edit_estudiante(
         db, estudiante_id, estudiante)
