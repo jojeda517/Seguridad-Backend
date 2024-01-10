@@ -53,7 +53,6 @@ def get_usuario_por_rol(rol_id: int = Path(..., gt=0), db: Session = Depends(get
 @usuario_router.post("/usuario")
 def create_usuario(usuario: UsuarioSchema, db: Session = Depends(get_db)):
     _usuario = usuario
-    _usuario.contrasena = encriptar(_usuario.contrasena)
     db_usuario = UsuarioRepository.create_usuario(db, _usuario)
     return ResponseSchema(
         code="OK",
