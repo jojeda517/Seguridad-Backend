@@ -36,3 +36,9 @@ class FacultadRepository:
         db.delete(_facultad)
         db.commit()
         return _facultad
+
+    def update_file(db: Session, facultad_id: int, file: str):
+        db.query(Facultad).filter(Facultad.id ==
+                                  facultad_id).update({"logo": file})
+        db.commit()
+        return db.query(Facultad).filter(Facultad.id == facultad_id).first()
