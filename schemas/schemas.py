@@ -148,14 +148,12 @@ class UsuarioGetSchema(BaseModel):
 
 class UsuarioLoginSechema(BaseModel):
     correo: str
-    contrasena: str
 
     class Config:
         orm_mode = True
         schema_extra = {
             "example": {
                 "correo": "test@gmail.com",
-                "contrasena": "test"
             }
         }
 
