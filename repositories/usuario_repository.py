@@ -14,7 +14,7 @@ class UsuarioRepository:
         return db.query(Usuario).filter(Usuario.rol_id == rol_id).all()
 
     def login(db: Session, usuario: UsuarioLoginSechema):
-        return db.query(Usuario).filter(Usuario.correo == usuario.correo, Usuario.contrasena == usuario.contrasena).first()
+        return db.query(Usuario).filter(Usuario.correo == usuario.correo).first()
 
     def login_microsoft(db: Session, usuario: UsuarioLoginSechema):
         _usuario = db.query(Usuario).filter(
