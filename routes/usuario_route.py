@@ -7,7 +7,6 @@ from sqlalchemy.orm import Session
 from repositories.usuario_repository import UsuarioRepository
 from schemas.schemas import UsuarioSchema, ResponseSchema, UsuarioLoginSechema, UsuarioGetSchema
 
-from utils.seguridad import encriptar
 
 usuario_router = APIRouter()
 

@@ -6,7 +6,6 @@ from sqlalchemy.orm import Session
 from repositories.estudiante_repository import EstudianteRepository
 from schemas.schemas import EstudianteSchema, ResponseSchema
 
-from utils.seguridad import encriptar, desencriptar
 
 estudiante_router = APIRouter()
 

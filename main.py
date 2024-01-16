@@ -7,7 +7,6 @@ from routes.usuario_route import usuario_router
 from routes.documento_route import documento_router
 from routes.carga_masiva_route import carga_masiva_router
 from routes.rol_route import rol_router
-from routes.seguridad_test_route import seguridad_test
 
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -29,5 +28,4 @@ app.include_router(usuario_router, tags=["Usuario"], prefix="/api/v1")
 app.include_router(documento_router, tags=["Documento"], prefix="/api/v1")
 app.include_router(carga_masiva_router, tags=["Carga Masiva"], prefix="/api/v1")
 app.include_router(rol_router, tags=["Rol"], prefix="/api/v1")
-app.include_router(seguridad_test, tags=["Seguridad"], prefix="/api/v1")
 
