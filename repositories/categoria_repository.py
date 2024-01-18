@@ -1,8 +1,9 @@
 from sqlalchemy.orm import Session  # La sesión de la DB
 from sqlalchemy import insert, delete, join, select
 # El modelo ORM de nuestra DB
-from models.models import Categoria, detalle_categoria_carrera
+from models.models import Categoria, detalle_categoria_carrera, Documento
 from schemas.schemas import CategoriaSchema  # el esquema del JSON
+from repositories.documento_repository import DocumentoRepository
 
 
 class CategoriaRepository:
@@ -71,7 +72,13 @@ class CategoriaRepository:
             (detalle_categoria_carrera.c.ID_CAR_PER == carrera_id)
         )
 
+        #_documentos = DocumentoRepository.get_categoria(db, categoria_id)
+        stmt_documento = delete(Documento).where(
+            Documento.id_categoria == categoria_id
+        )
+
         db.execute(stmt_detalle_cat_car)
+        db.execute(stmt_documento)
         db.commit()
 
         return _categoria
