@@ -72,13 +72,7 @@ class CategoriaRepository:
             (detalle_categoria_carrera.c.ID_CAR_PER == carrera_id)
         )
 
-        #_documentos = DocumentoRepository.get_categoria(db, categoria_id)
-        stmt_documento = delete(Documento).where(
-            Documento.id_categoria == categoria_id
-        )
-
         db.execute(stmt_detalle_cat_car)
-        db.execute(stmt_documento)
         db.commit()
 
         return _categoria
